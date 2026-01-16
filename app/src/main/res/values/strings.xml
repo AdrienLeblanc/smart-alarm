@@ -1,3 +1,90 @@
 <resources>
     <string name="app_name">SmartAlarm</string>
+
+    <!-- Navigation -->
+    <string name="nav_alarms">Alarmes</string>
+    <string name="nav_settings">Paramètres</string>
+
+    <!-- Alarm List Screen -->
+    <string name="alarm_list_title">Mes Alarmes</string>
+    <string name="alarm_add">Ajouter une alarme</string>
+    <string name="alarm_empty_title">Aucune alarme</string>
+    <string name="alarm_empty_message">Appuyez sur + pour ajouter une alarme</string>
+    <string name="alarm_delete_confirm_title">Supprimer l\'alarme</string>
+    <string name="alarm_delete_confirm_message">Voulez-vous vraiment supprimer cette alarme ?</string>
+    <string name="alarm_delete">Supprimer</string>
+    <string name="cancel">Annuler</string>
+
+    <!-- Alarm Edit Screen -->
+    <string name="alarm_edit_new_title">Nouvelle alarme</string>
+    <string name="alarm_edit_modify_title">Modifier l\'alarme</string>
+    <string name="alarm_save">Enregistrer</string>
+    <string name="alarm_time_label">Heure de l\'alarme</string>
+    <string name="alarm_time_tap_to_edit">Tapez pour modifier</string>
+    <string name="alarm_label">Libellé</string>
+    <string name="alarm_repeat">Répétition</string>
+    <string name="alarm_vibrate">Vibration</string>
+    <string name="alarm_ringtone">Sonnerie</string>
+    <string name="alarm_snooze">Mode Snooze</string>
+    <string name="alarm_snooze_duration">%d minutes</string>
+    <string name="alarm_detection_method">Méthode de détection de réveil</string>
+
+    <!-- Days of week -->
+    <string name="day_monday_short">Lun</string>
+    <string name="day_tuesday_short">Mar</string>
+    <string name="day_wednesday_short">Mer</string>
+    <string name="day_thursday_short">Jeu</string>
+    <string name="day_friday_short">Ven</string>
+    <string name="day_saturday_short">Sam</string>
+    <string name="day_sunday_short">Dim</string>
+
+    <!-- Repeat patterns -->
+    <string name="repeat_once">Ponctuelle</string>
+    <string name="repeat_daily">Tous les jours</string>
+    <string name="repeat_weekdays">Jours de semaine</string>
+    <string name="repeat_weekend">Week-end</string>
+
+    <!-- Detection methods -->
+    <string name="detection_manual">Manuel</string>
+    <string name="detection_manual_desc">Désactivation manuelle uniquement</string>
+    <string name="detection_motion">Capteur de mouvement</string>
+    <string name="detection_motion_desc">Détecte les mouvements dans la pièce</string>
+    <string name="detection_light">Capteur de luminosité</string>
+    <string name="detection_light_desc">Détecte si la lumière est allumée</string>
+    <string name="detection_sound">Capteur de son</string>
+    <string name="detection_sound_desc">Détecte les bruits ambiants</string>
+    <string name="detection_accelerometer">Accéléromètre</string>
+    <string name="detection_accelerometer_desc">Détecte les mouvements du téléphone</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_enable">Activer les notifications</string>
+    <string name="settings_notifications_desc">Recevoir des notifications pour les alarmes à venir</string>
+    <string name="settings_appearance">Apparence</string>
+    <string name="settings_theme">Thème</string>
+    <string name="settings_theme_system">Système</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_defaults">Paramètres par défaut</string>
+    <string name="settings_default_vibrate">Vibration par défaut</string>
+    <string name="settings_default_vibrate_desc">Activer la vibration pour les nouvelles alarmes</string>
+    <string name="settings_about">À propos</string>
+    <string name="settings_app_name">SmartAlarm</string>
+    <string name="settings_version">Version 1.0</string>
+    <string name="settings_description">Une application d\'alarme intelligente qui s\'adapte à votre réveil.</string>
+
+    <!-- Alarm notifications -->
+    <string name="notification_upcoming_title">Alarme à venir</string>
+    <string name="notification_upcoming_message">Alarme dans %d minutes</string>
+    <string name="notification_ringing_title">Alarme en cours</string>
+    <string name="notification_ringing_message">Votre alarme sonne</string>
+    <string name="notification_action_stop">Arrêter</string>
+    <string name="notification_action_snooze">Snooze</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="back">Retour</string>
+    <string name="error">Erreur</string>
+    <string name="loading">Chargement…</string>
 </resources>
