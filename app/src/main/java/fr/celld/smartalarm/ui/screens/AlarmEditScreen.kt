@@ -1,14 +1,40 @@
 package fr.celld.smartalarm.ui.screens
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,7 +42,7 @@ import fr.celld.smartalarm.data.model.DetectionMethod
 import fr.celld.smartalarm.ui.viewmodel.AlarmEditViewModel
 
 /**
- * Écran d'édition/création d'une alarme
+ * Alarm edit/create screen
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +93,7 @@ fun AlarmEditScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Sélecteur d'heure
+                // Time picker
                 TimePickerSection(
                     hour = currentAlarm.hour,
                     minute = currentAlarm.minute,
@@ -88,7 +114,7 @@ fun AlarmEditScreen(
 
                 HorizontalDivider()
 
-                // Jours de répétition
+                // Repeat days
                 RepeatDaysSection(
                     selectedDays = currentAlarm.repeatDays,
                     onDayToggled = { day -> viewModel.toggleRepeatDay(day) }
@@ -111,7 +137,7 @@ fun AlarmEditScreen(
 
                 HorizontalDivider()
 
-                // Méthode de détection
+                // Detection method
                 DetectionMethodSection(
                     selectedMethod = currentAlarm.detectionMethod,
                     onMethodSelected = { viewModel.updateDetectionMethod(it) }
@@ -143,12 +169,15 @@ fun AlarmEditScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerSection(
     hour: Int,
     minute: Int,
     onTimeChanged: (Int, Int) -> Unit
 ) {
+    var showTimePicker by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -159,20 +188,72 @@ fun TimePickerSection(
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // Affichage simple de l'heure (un vrai Time Picker serait mieux)
-        Text(
-            text = String.format("%02d:%02d", hour, minute),
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.primary
-        )
+        // Clickable time display
+        TextButton(
+            onClick = { showTimePicker = true }
+        ) {
+            Text(
+                text = String.format(java.util.Locale.getDefault(), "%02d:%02d", hour, minute),
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
 
-        // TODO: Implémenter un vrai Time Picker avec Material3
         Text(
             text = "Tapez pour modifier",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+
+    // TimePicker dialog
+    if (showTimePicker) {
+        TimePickerDialog(
+            initialHour = hour,
+            initialMinute = minute,
+            onDismiss = { showTimePicker = false },
+            onConfirm = { selectedHour, selectedMinute ->
+                onTimeChanged(selectedHour, selectedMinute)
+                showTimePicker = false
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimePickerDialog(
+    initialHour: Int,
+    initialMinute: Int,
+    onDismiss: () -> Unit,
+    onConfirm: (Int, Int) -> Unit
+) {
+    val timePickerState = rememberTimePickerState(
+        initialHour = initialHour,
+        initialMinute = initialMinute,
+        is24Hour = true
+    )
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Annuler")
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                onConfirm(timePickerState.hour, timePickerState.minute)
+            }) {
+                Text("OK")
+            }
+        },
+        text = {
+            TimePicker(
+                state = timePickerState
+            )
+        }
+    )
 }
 
 @Composable

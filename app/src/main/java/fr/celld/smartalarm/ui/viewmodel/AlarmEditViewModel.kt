@@ -5,16 +5,18 @@ import androidx.lifecycle.viewModelScope
 import fr.celld.smartalarm.data.model.Alarm
 import fr.celld.smartalarm.data.model.DetectionMethod
 import fr.celld.smartalarm.data.repository.AlarmRepository
+import fr.celld.smartalarm.service.AlarmScheduler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel pour l'édition d'une alarme
+ * ViewModel for editing an alarm
  */
 class AlarmEditViewModel(
-    private val repository: AlarmRepository
+    private val repository: AlarmRepository,
+    private val scheduler: AlarmScheduler
 ) : ViewModel() {
 
     private val _alarm = MutableStateFlow<Alarm?>(null)
@@ -24,7 +26,7 @@ class AlarmEditViewModel(
     val isSaving: StateFlow<Boolean> = _isSaving.asStateFlow()
 
     /**
-     * Charge une alarme existante pour l'édition
+     * Loads an existing alarm for editing
      */
     fun loadAlarm(alarmId: Long) {
         viewModelScope.launch {
@@ -33,7 +35,7 @@ class AlarmEditViewModel(
     }
 
     /**
-     * Crée une nouvelle alarme
+     * Creates a new alarm
      */
     fun createNewAlarm() {
         _alarm.value = Alarm(
@@ -44,28 +46,28 @@ class AlarmEditViewModel(
     }
 
     /**
-     * Met à jour l'heure de l'alarme
+     * Updates the alarm time
      */
     fun updateTime(hour: Int, minute: Int) {
         _alarm.value = _alarm.value?.copy(hour = hour, minute = minute)
     }
 
     /**
-     * Met à jour le label de l'alarme
+     * Updates the alarm label
      */
     fun updateLabel(label: String) {
         _alarm.value = _alarm.value?.copy(label = label)
     }
 
     /**
-     * Met à jour les jours de répétition
+     * Updates repeat days
      */
     fun updateRepeatDays(days: Set<Int>) {
         _alarm.value = _alarm.value?.copy(repeatDays = days)
     }
 
     /**
-     * Toggle un jour de répétition
+     * Toggles a repeat day
      */
     fun toggleRepeatDay(day: Int) {
         _alarm.value?.let { currentAlarm ->
@@ -79,28 +81,28 @@ class AlarmEditViewModel(
     }
 
     /**
-     * Met à jour la sonnerie
+     * Updates the ringtone
      */
     fun updateRingtone(uri: String) {
         _alarm.value = _alarm.value?.copy(ringtoneUri = uri)
     }
 
     /**
-     * Met à jour la vibration
+     * Updates vibration
      */
     fun updateVibrate(vibrate: Boolean) {
         _alarm.value = _alarm.value?.copy(vibrate = vibrate)
     }
 
     /**
-     * Met à jour la méthode de détection
+     * Updates the detection method
      */
     fun updateDetectionMethod(method: DetectionMethod) {
         _alarm.value = _alarm.value?.copy(detectionMethod = method)
     }
 
     /**
-     * Met à jour le snooze
+     * Updates snooze settings
      */
     fun updateSnooze(enabled: Boolean, duration: Int = 5) {
         _alarm.value = _alarm.value?.copy(
@@ -110,15 +112,22 @@ class AlarmEditViewModel(
     }
 
     /**
-     * Enregistre l'alarme
+     * Saves the alarm
      */
     fun saveAlarm(onSuccess: () -> Unit) {
         viewModelScope.launch {
             _isSaving.value = true
             _alarm.value?.let { alarm ->
                 try {
-                    repository.saveAlarm(alarm)
-                    // TODO: Planifier l'alarme avec AlarmManager
+                    val alarmId = repository.saveAlarm(alarm)
+                    val savedAlarm = if (alarm.id == 0L) {
+                        alarm.copy(id = alarmId)
+                    } else {
+                        alarm
+                    }
+                    if (savedAlarm.isEnabled) {
+                        scheduler.scheduleAlarm(savedAlarm)
+                    }
                     onSuccess()
                 } finally {
                     _isSaving.value = false

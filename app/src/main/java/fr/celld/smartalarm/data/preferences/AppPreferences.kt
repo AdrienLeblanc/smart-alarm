@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**
- * Extension pour créer le DataStore
+ * Extension to create the DataStore
  */
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
 
 /**
- * Gestion des préférences de l'application
+ * Application preferences management
  */
 class AppPreferences(private val context: Context) {
 
@@ -29,7 +29,7 @@ class AppPreferences(private val context: Context) {
     }
 
     /**
-     * Notifications activées
+     * Notifications enabled
      */
     val notificationsEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
         preferences[NOTIFICATIONS_ENABLED] ?: true
@@ -42,7 +42,7 @@ class AppPreferences(private val context: Context) {
     }
 
     /**
-     * Mode de thème (light, dark, system)
+     * Theme mode (light, dark, system)
      */
     val themeMode: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[THEME_MODE] ?: "system"
@@ -55,7 +55,7 @@ class AppPreferences(private val context: Context) {
     }
 
     /**
-     * Sonnerie par défaut
+     * Default ringtone
      */
     val defaultRingtone: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[DEFAULT_RINGTONE] ?: ""
@@ -68,7 +68,7 @@ class AppPreferences(private val context: Context) {
     }
 
     /**
-     * Vibration par défaut
+     * Default vibration
      */
     val defaultVibrate: Flow<Boolean> = context.dataStore.data.map { preferences ->
         preferences[DEFAULT_VIBRATE] ?: true
@@ -81,7 +81,7 @@ class AppPreferences(private val context: Context) {
     }
 
     /**
-     * Durée de snooze par défaut
+     * Default snooze duration
      */
     val defaultSnoozeDuration: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[DEFAULT_SNOOZE_DURATION] ?: "5"

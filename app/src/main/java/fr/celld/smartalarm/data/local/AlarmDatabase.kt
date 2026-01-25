@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import fr.celld.smartalarm.data.model.Alarm
 
 /**
- * Base de données Room pour SmartAlarm
+ * Room database for SmartAlarm
  */
 @Database(
     entities = [Alarm::class],

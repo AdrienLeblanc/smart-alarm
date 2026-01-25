@@ -5,49 +5,49 @@ import fr.celld.smartalarm.data.model.Alarm
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository pour gérer les opérations sur les alarmes
+ * Repository to manage alarm operations
  */
 class AlarmRepository(private val alarmDao: AlarmDao) {
 
     /**
-     * Récupère toutes les alarmes
+     * Retrieves all alarms
      */
     fun getAllAlarms(): Flow<List<Alarm>> = alarmDao.getAllAlarms()
 
     /**
-     * Récupère toutes les alarmes activées
+     * Retrieves all enabled alarms
      */
     fun getEnabledAlarms(): Flow<List<Alarm>> = alarmDao.getEnabledAlarms()
 
     /**
-     * Récupère une alarme par son ID
+     * Retrieves an alarm by its ID
      */
     suspend fun getAlarmById(alarmId: Long): Alarm? = alarmDao.getAlarmById(alarmId)
 
     /**
-     * Ajoute ou met à jour une alarme
+     * Adds or updates an alarm
      */
     suspend fun saveAlarm(alarm: Alarm): Long = alarmDao.insertAlarm(alarm)
 
     /**
-     * Met à jour une alarme
+     * Updates an alarm
      */
     suspend fun updateAlarm(alarm: Alarm) = alarmDao.updateAlarm(alarm)
 
     /**
-     * Supprime une alarme
+     * Deletes an alarm
      */
     suspend fun deleteAlarm(alarm: Alarm) = alarmDao.deleteAlarm(alarm)
 
     /**
-     * Active/désactive une alarme
+     * Enables/disables an alarm
      */
     suspend fun toggleAlarm(alarmId: Long, enabled: Boolean) {
         alarmDao.setAlarmEnabled(alarmId, enabled)
     }
 
     /**
-     * Supprime toutes les alarmes
+     * Deletes all alarms
      */
     suspend fun deleteAllAlarms() = alarmDao.deleteAllAlarms()
 }

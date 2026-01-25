@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.celld.smartalarm.data.model.Alarm
 import fr.celld.smartalarm.data.repository.AlarmRepository
+import fr.celld.smartalarm.service.AlarmScheduler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -13,11 +14,12 @@ import kotlinx.coroutines.launch
  * ViewModel pour la liste des alarmes
  */
 class AlarmListViewModel(
-    private val repository: AlarmRepository
+    private val repository: AlarmRepository,
+    private val scheduler: AlarmScheduler
 ) : ViewModel() {
 
     /**
-     * Liste des alarmes (StateFlow pour Compose)
+     * List of alarms (StateFlow for Compose)
      */
     val alarms: StateFlow<List<Alarm>> = repository.getAllAlarms()
         .stateIn(
@@ -27,27 +29,34 @@ class AlarmListViewModel(
         )
 
     /**
-     * Active ou désactive une alarme
+     * Enables or disables an alarm
      */
     fun toggleAlarm(alarmId: Long, enabled: Boolean) {
         viewModelScope.launch {
             repository.toggleAlarm(alarmId, enabled)
-            // TODO: Planifier ou annuler l'alarme avec AlarmManager
+            val alarm = repository.getAlarmById(alarmId)
+            alarm?.let {
+                if (enabled) {
+                    scheduler.scheduleAlarm(it)
+                } else {
+                    scheduler.cancelAlarm(alarmId)
+                }
+            }
         }
     }
 
     /**
-     * Supprime une alarme
+     * Deletes an alarm
      */
     fun deleteAlarm(alarm: Alarm) {
         viewModelScope.launch {
+            scheduler.cancelAlarm(alarm.id)
             repository.deleteAlarm(alarm)
-            // TODO: Annuler l'alarme planifiée avec AlarmManager
         }
     }
 
     /**
-     * Duplique une alarme
+     * Duplicates an alarm
      */
     fun duplicateAlarm(alarm: Alarm) {
         viewModelScope.launch {

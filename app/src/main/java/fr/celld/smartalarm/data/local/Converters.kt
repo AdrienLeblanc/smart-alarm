@@ -4,7 +4,7 @@ import androidx.room.TypeConverter
 import fr.celld.smartalarm.data.model.DetectionMethod
 
 /**
- * Convertisseurs pour Room afin de gérer les types non-primitifs
+ * Converters for Room to handle non-primitive types
  */
 class Converters {
 

@@ -1,7 +1,7 @@
 package fr.celld.smartalarm.ui.navigation
 
 /**
- * Définition des routes de navigation dans l'application
+ * Navigation routes definition in the application
  */
 object NavRoutes {
     const val ALARM_LIST = "alarm_list"
@@ -13,7 +13,7 @@ object NavRoutes {
 }
 
 /**
- * Destinations de navigation pour la barre de navigation
+ * Navigation destinations for the navigation bar
  */
 sealed class Screen(val route: String, val title: String) {
     data object AlarmList : Screen(NavRoutes.ALARM_LIST, "Alarmes")

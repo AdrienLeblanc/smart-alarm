@@ -25,6 +25,7 @@ import androidx.navigation.navArgument
 import fr.celld.smartalarm.data.local.AlarmDatabase
 import fr.celld.smartalarm.data.preferences.AppPreferences
 import fr.celld.smartalarm.data.repository.AlarmRepository
+import fr.celld.smartalarm.service.AlarmScheduler
 import fr.celld.smartalarm.ui.navigation.NavRoutes
 import fr.celld.smartalarm.ui.screens.AlarmEditScreen
 import fr.celld.smartalarm.ui.screens.AlarmListScreen
@@ -39,14 +40,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initialisation des dépendances
+        // Dependencies initialization
         val database = AlarmDatabase.getDatabase(applicationContext)
         val repository = AlarmRepository(database.alarmDao())
         val preferences = AppPreferences(applicationContext)
+        val alarmScheduler = AlarmScheduler(applicationContext)
 
-        // Création des ViewModels
-        val alarmListViewModel = AlarmListViewModel(repository)
-        val alarmEditViewModel = AlarmEditViewModel(repository)
+        // ViewModels creation
+        val alarmListViewModel = AlarmListViewModel(repository, alarmScheduler)
+        val alarmEditViewModel = AlarmEditViewModel(repository, alarmScheduler)
         val settingsViewModel = SettingsViewModel(preferences)
 
         setContent {

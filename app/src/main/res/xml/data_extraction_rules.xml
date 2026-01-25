@@ -5,15 +5,15 @@
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <!-- Inclure la base de données des alarmes dans le backup cloud -->
+        <include domain="database" path="alarm_database"/>
+        <include domain="sharedpref" path="app_preferences"/>
+        <!-- Exclure les fichiers temporaires et caches -->
+        <exclude domain="cache"/>
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <!-- Inclure les données lors du transfert d'appareil -->
+        <include domain="database" path="alarm_database"/>
+        <include domain="sharedpref" path="app_preferences"/>
     </device-transfer>
-    -->
 </data-extraction-rules>

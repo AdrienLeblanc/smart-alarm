@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel pour les paramètres de l'application
+ * ViewModel for application settings
  */
 class SettingsViewModel(
     private val preferences: AppPreferences

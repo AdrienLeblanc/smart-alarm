@@ -9,7 +9,7 @@ import fr.celld.smartalarm.data.local.Converters
 import java.time.LocalTime
 
 /**
- * Entité représentant une alarme dans la base de données
+ * Entity representing an alarm in the database
  */
 @Entity(tableName = "alarms")
 @TypeConverters(Converters::class)
@@ -24,7 +24,7 @@ data class Alarm(
 
     val label: String = "",
 
-    // Jours de répétition (lundi = 0, dimanche = 6)
+    // Repeat days (Monday = 0, Sunday = 6)
     val repeatDays: Set<Int> = emptySet(),
 
     val ringtoneUri: String = "",
@@ -37,32 +37,32 @@ data class Alarm(
     val snoozeDuration: Int = 5 // minutes
 ) {
     /**
-     * Retourne l'heure de l'alarme
+     * Returns the alarm time
      */
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTime(): LocalTime = LocalTime.of(hour, minute)
 
     /**
-     * Vérifie si l'alarme est programmée pour un jour donné
-     * @param dayOfWeek Jour de la semaine (0 = lundi, 6 = dimanche)
+     * Checks if the alarm is scheduled for a given day
+     * @param dayOfWeek Day of the week (0 = Monday, 6 = Sunday)
      */
     fun isScheduledForDay(dayOfWeek: Int): Boolean {
         return repeatDays.isEmpty() || repeatDays.contains(dayOfWeek)
     }
 
     /**
-     * Vérifie si l'alarme se répète
+     * Checks if the alarm repeats
      */
     fun isRepeating(): Boolean = repeatDays.isNotEmpty()
 }
 
 /**
- * Méthode de détection pour savoir si l'utilisateur est déjà réveillé
+ * Detection method to determine if the user is already awake
  */
 enum class DetectionMethod {
-    MANUAL,              // Désactivation manuelle uniquement
-    MOTION_SENSOR,       // Capteur de mouvement
-    LIGHT_SENSOR,        // Capteur de luminosité
-    SOUND_SENSOR,        // Capteur de son
-    ACCELEROMETER        // Accéléromètre
+    MANUAL,              // Manual deactivation only
+    MOTION_SENSOR,       // Motion sensor
+    LIGHT_SENSOR,        // Light sensor
+    SOUND_SENSOR,        // Sound sensor
+    ACCELEROMETER        // Accelerometer
 }
